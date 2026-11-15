@@ -41,32 +41,3 @@
 2. При шуме 0.05 получен 1 захват, при шуме 0.02 — 9 в пробном запуске и 6 в записи. Для итогового видео выбран 0.02. Различие двух прогонов показывает разброс результата при случайном шуме. Последовательность шума PyTorch отдельно не фиксировалась.
 3. При Y=0.15 между X=0.40 и X=0.45 наблюдался переход от 2 до 10 захватов. Число захватов чувствительно к координате рядом с этим участком. По десяти эпизодам и отдельным точкам нельзя восстановить точную границу всей рабочей зоны.
 4. Перед переносом на реального робота следует проверить реальные погрешности наблюдений и вариации положения объектов. Успех в базовой симуляции сопровождается падением качества при добавленном шуме и изменении позиции.
-
-Флаги `cube_x` и `cube_y` задают абсолютные начальные координаты в метрах. В исходном `inference.py` переопределение позиции меняет `qpos` после сброса среды без пересчёта исходных наблюдений. Влияние этого первого наблюдения отдельно не измерялось, поэтому результаты характеризуют текущую реализацию скрипта целиком.
-
-## Повторение на Windows
-
-Открыть Docker Desktop. Для уже созданного контейнера выполнить в PowerShell
-
-```powershell
-docker start mujoco-sim-cpu
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --episodes 10
-```
-
-Открыть `http://localhost:6080/vnc.html`. Для повторения двух изменённых условий использовать
-
-```powershell
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --cube_x 0.41875 --cube_y 0.15 --episodes 10
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --obs_noise 0.02 --episodes 10
-```
-
-Для новой записи добавить `--record logs/new_run.mp4`. Для сравнения ранних этапов заменить имя чекпоинта на `model_50.pt` или `model_500.pt`.
-
-При новой установке сначала клонировать этот форк, перейти в корень клона и выполнить
-
-```powershell
-docker build -t mujoco-vnc-cpu -f environment/Dockerfile.cpu .
-docker run -d --name mujoco-sim-cpu -p 127.0.0.1:6080:6080 --mount "type=bind,source=$($PWD.Path),target=/workspace" mujoco-vnc-cpu
-```
-
-Выполненный блокнот обучения с сохранённым выводом: [training.ipynb](training.ipynb). Оригинальная скачанная копия Colab от 7 ноября 2026 года; содержит обучение на 4096 средах до итерации 1000/1001.\n
