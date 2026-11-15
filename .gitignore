@@ -210,3 +210,8 @@ __marimo__/
 logs/
 *.mp4
 *.pt
+
+# Saved practice deliverables
+!results/practice1/checkpoints/*.pt
+!results/practice1/videos/*.mp4
+!results/practice2/checkpoints/*/*.pt

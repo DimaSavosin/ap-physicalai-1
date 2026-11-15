@@ -50,14 +50,14 @@
 
 ```powershell
 docker start mujoco-sim-cpu
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/checkpoints/model_1000.pt --episodes 10
+docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --episodes 10
 ```
 
 Открыть `http://localhost:6080/vnc.html`. Для повторения двух изменённых условий использовать
 
 ```powershell
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/checkpoints/model_1000.pt --cube_x 0.41875 --cube_y 0.15 --episodes 10
-docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/checkpoints/model_1000.pt --obs_noise 0.02 --episodes 10
+docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --cube_x 0.41875 --cube_y 0.15 --episodes 10
+docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu --checkpoint results/practice1/checkpoints/model_1000.pt --obs_noise 0.02 --episodes 10
 ```
 
 Для новой записи добавить `--record logs/new_run.mp4`. Для сравнения ранних этапов заменить имя чекпоинта на `model_50.pt` или `model_500.pt`.
@@ -68,3 +68,5 @@ docker exec -it -w /workspace mujoco-sim-cpu python3 inference.py --device cpu -
 docker build -t mujoco-vnc-cpu -f environment/Dockerfile.cpu .
 docker run -d --name mujoco-sim-cpu -p 127.0.0.1:6080:6080 --mount "type=bind,source=$($PWD.Path),target=/workspace" mujoco-vnc-cpu
 ```
+
+Выполненный блокнот обучения с сохранённым выводом: [training.ipynb](training.ipynb). Оригинальная скачанная копия Colab от 7 ноября 2026 года; содержит обучение на 4096 средах до итерации 1000/1001.\n

@@ -1,0 +1,11 @@
+episode,reward,grasp,success,final_distance_m,threshold_m
+1,1242.19,true,false,0.071,0.05
+2,1192.69,true,false,0.071,0.05
+3,1313.84,true,true,0.040,0.05
+4,896.60,true,false,0.137,0.05
+5,1199.19,true,false,0.099,0.05
+6,1373.03,true,false,0.052,0.05
+7,1344.17,true,true,0.030,0.05
+8,574.56,true,false,0.092,0.05
+9,1239.96,true,false,0.080,0.05
+10,1289.78,true,true,0.041,0.05
