@@ -1,6 +1,7 @@
-"""Extract training curves from saved Colab output; no training is performed."""
+"""Extract TensorBoard curves and verify them against notebook output."""
 from pathlib import Path
 import csv
+import json
 import re
 import struct
 import matplotlib
@@ -9,11 +10,11 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parent
 RUNS = {
-    "baseline": "baseline-training-output.txt",
-    "max_iters_500": "max-iters-500-training-output.txt",
-    "box_target_strong": "box-target-strong-training-output.txt",
-    "qpos_strong": "qpos-strong-training-output.txt",
-    "learning_rate_3e4": "learning-rate-3e4-training-output.txt",
+    "baseline": "baseline.ipynb",
+    "max_iters_500": "max_iters_500.ipynb",
+    "box_target_strong": "box_target_strong.ipynb",
+    "qpos_strong": "qpos_strong.ipynb",
+    "learning_rate_3e4": "learning_rate_3e4.ipynb",
 }
 curves = {}
 
@@ -79,7 +80,12 @@ with (ROOT / "learning-curves.csv").open("w", newline="", encoding="utf-8") as h
         points = event_points(ROOT / "events" / name)
         if not points:
             raise ValueError(f"No Train/mean_reward scalars in {name}")
-        content = (ROOT / filename).read_text(encoding="utf-8")
+        notebook = json.loads((ROOT / filename).read_text(encoding="utf-8"))
+        content = "\n".join(
+            "".join(output.get("text", []))
+            for cell in notebook["cells"]
+            for output in cell.get("outputs", [])
+        )
         printed = {}
         for part in re.split(r"Learning iteration\s+", content)[1:]:
             iteration = re.match(r"(\d+)/\d+", part)
